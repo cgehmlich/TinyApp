@@ -5,6 +5,11 @@
   <title>TinyApp</title>
 </head>
 <body>
-        <%= longURL[shortURL]%>
+      Short URL: <%= shortURL %>  <br />
+      <% action = "/urls/"+shortURL %>        
+      <form method="POST" action="<%= action %>">
+        <input type="text" name="newLong" placeholder="<%= longURL[shortURL]%>" value="" />
+        <button type="submit">Update</button>
+      </form>
 </body>
 </html>
