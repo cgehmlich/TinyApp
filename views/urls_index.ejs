@@ -5,13 +5,14 @@
   <title>TinyApp</title>
 </head>
 <body>
-    <% for (url in urls) { %>
-    <li><%= url %> - <a href="<%= urls[url]%>" title="<%= urls[url]%>"><%= urls[url]%></a> 
-        <% action = "urls/"+url+"/delete" %>        
+    <% urls.forEach(function (url) { %>
+    <li><%= url.shortURL %> - <a href="<%= url.longURL%>" title="<%= url.longURL%>"><%= url.longURL%></a> 
+        <% action = "/urls/"+url.shortURL %>
+        <% action = action+"/delete" %>        
     <form method="POST" action="<%= action %>">
     <input type="submit" value="Delete">
-    <a href="/urls/<%=url%>" title="Edit URL">Edit URL</a>
+    <a href="/urls/<%=url.shortURL%>" title="Edit URL">Edit URL</a>
     </form><br/></li>
-    <% }; %>
+    <% }); %>
 </body>
 </html>
