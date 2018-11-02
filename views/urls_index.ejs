@@ -5,7 +5,7 @@
   <title>TinyApp</title>
 </head>
 <body>
-    <% urls.forEach(function (url) { %>
+    <% newDB.forEach(function (url) { %>
     <li><%= url.shortURL %> - <a href="<%= url.longURL%>" title="<%= url.longURL%>"><%= url.longURL%></a> 
         <% action = "/urls/"+url.shortURL %>
         <% action = action+"/delete" %>        
@@ -14,5 +14,6 @@
     <a href="/urls/<%=url.shortURL%>" title="Edit URL">Edit URL</a>
     </form><br/></li>
     <% }); %>
+    <a href="/urls/new" title="new">New URL</a>
 </body>
 </html>

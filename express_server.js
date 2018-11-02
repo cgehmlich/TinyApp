@@ -36,6 +36,10 @@ function generateRandomString() {
     }
     return randomstring;
 }
+function urlsForUser(id) {
+    const result = urlDatabase.filter(url => url.userID === id )
+    return result;
+}
 app.get("/", (req, res) => {
     res.send("Hello!");
 });
@@ -43,13 +47,14 @@ app.get("/urls.json", (req, res) => {
     res.json(urlDatabase);
 });
 app.get("/urls", (req, res) => {
-    console.log(urlDatabase)
     let user = {};
     if (req.cookies["user_id"]) {
         id = req.cookies["user_id"]
         user = users[id];
     }
-    let templateVars = { urls: urlDatabase, user };
+    newDB = urlsForUser(req.cookies["user_id"])
+    console.log(urlDatabase)
+    let templateVars = { urls: urlDatabase, user, newDB };
     res.render("urls_index", templateVars);
 });
 app.get("/urls/new", (req, res) => {
@@ -61,12 +66,22 @@ app.get("/urls/new", (req, res) => {
     else {res.redirect("/login")}
 });
 app.get("/urls/:id", (req, res) => {
-    let templateVars = { shortURL: req.params.id, longURL: urlDatabase, id: req.cookies["user_id"] };
+    if (req.cookies["user_id"]) {
+        id = req.cookies["user_id"]
+        user = users[id];
+    }
+    let short = req.params.id;
+    const index = urlDatabase.findIndex(url => url.shortURL === short)
+    let url = urlDatabase[index];
+    if (urlDatabase[index].userID !== req.cookies["user_id"]) {res.status(403).send("log in as url owner")}
+    let templateVars = { url, user, urls: urlDatabase};
     res.render("urls_show", templateVars);
 });
 app.get("/u/:shortURL", (req, res) => {
-    let shortURL = req.params.shortURL;
-    let longURL = urlDatabase[shortURL];
+    let id = req.params.shortURL;
+    const index = urlDatabase.findIndex(url => url.shortURL === id);
+         if (index === -1) {res.status(403).send("invalid entry")}
+    let longURL = urlDatabase[index].longURL;
     res.redirect(longURL);
 });
 app.get("/register", (req, res) => {
@@ -139,13 +154,17 @@ app.post("/urls/:id", (req, res) => {
     const id = req.params.id;
     const {newLong} = req.body
     const index = urlDatabase.findIndex(url => url.shortURL === id)
+    if (req.cookies["user_id"] !== urlDatabase[index].userID) {res.status(403).send('not permitted')}
     urlDatabase[index].longURL = newLong;
+    console.log(urlDatabase)
     res.redirect("/urls")
 })
 app.post("/urls/:id/delete", (req, res) => {
     const id = req.params.id;
     const index = urlDatabase.findIndex(url => url.shortURL === id)
-    delete urlDatabase[index];
+    if (req.cookies["user_id"] !== urlDatabase[index].userID) {res.status(403).send('not permitted')}
+    urlDatabase.splice(index, 1);
+    console.log(urlDatabase)
     res.redirect("/urls")
 })
 app.listen(PORT, () => {
