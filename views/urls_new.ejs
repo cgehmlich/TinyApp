@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head></head>
-  <body style="font-size:20px; padding:50px;">
-    <% include partials/_header %>
-    <form action="/urls" method="POST" style="margin:150px;">
-      <label for="longURL">Enter a URL:</label>
-      <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
-      <input type="submit" value="Submit">
-    </form>
-  </body>
+
+<head>
+  <% include partials/_header %>
+  <title>TinyApp</title>
+</head>
+
+<body>
+  <% if (userID) { %>
+  <form action="/urls" method="POST">
+    <label for="longURL">Long URL</label>
+    <input id="longURL" type="url" name="longURL" placeholder="enter long URL">
+    <input type="submit" value="Shorten">
+  </form>
+  <% } else { %>
+  <hr>
+  <h2>Error 401</h2>
+  <h3>Please register or login first.</h3>
+  <% } %>
+</body>
+
 </html>

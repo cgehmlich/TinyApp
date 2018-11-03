@@ -1,17 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <% include partials/_header %>
+  <% include ./partials/_header %>
+
   <title>TinyApp</title>
 </head>
+
 <body>
-    <%shortURL= url.shortURL %>
-      Short URL: <%=shortURL%>
-        <br />
-      <% action = "/urls/"+shortURL %>        
-      <form method="POST" action="<%= action %>">
-        <input type="text" name="newLong" placeholder="<%= url.longURL%>" value="" />
-        <button type="submit">Update</button>
-      </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Short URL</th>
+        <th>Long URL</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <a href='/u/<%= shortUrl %>'>
+            <%= shortUrl %>
+          </a>
+        </td>
+        <td>
+          <%= urls[shortUrl].longURL %>
+        </td>
+        <td>
+          <form method="POST" action="/urls/<%= shortUrl %>/delete">
+            <input type="submit" value="Delete">
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <form action="/urls/<%= shortUrl %>/" method="POST">
+    <label for="longURL">Edit long URL:</label>
+    <input id="longURL" type="url" name="longURL" placeholder="<%= urls[shortUrl].longURL %>">
+    <input type="submit" value="Edit">
+  </form>
 </body>
+
 </html>

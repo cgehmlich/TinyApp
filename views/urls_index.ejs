@@ -1,19 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <% include partials/_header %>
-  <title>TinyApp</title>
+    <% include partials/_header %>
+    <title>TinyApp</title>
 </head>
+
 <body>
-    <% newDB.forEach(function (url) { %>
-    <li><%= url.shortURL %> - <a href="<%= url.longURL%>" title="<%= url.longURL%>"><%= url.longURL%></a> 
-        <% action = "/urls/"+url.shortURL %>
-        <% action = action+"/delete" %>        
-    <form method="POST" action="<%= action %>">
-    <input type="submit" value="Delete">
-    <a href="urls/<%=url.shortURL%>" title="Edit URL">Edit URL</a>
-    </form><br/></li>
-    <% }); %>
-    <a href="/urls/new" title="new">New URL</a>
+    <table class="pure-table pure-table-bordered">
+        <% if (Object.keys(urls).length !== 0) { %>
+        <thead>
+            <tr>
+                <th>Short URL</th>
+                <th>Long URL</th>
+                <th>Edit URL</th>
+                <th>Delete URL</th>
+            </tr>
+        </thead>
+        <% } else { %>
+        <h4>You do not have any short URLs.</h4>
+        <% } %>
+        <tbody>
+            <% for (let url in urls) { %>
+            <tr>
+                <td>
+                    <a href='/u/<%= urls[url].shortURL %>'><%= urls[url].shortURL %></a>
+                </td>
+                <td>
+                    <%= urls[url].longURL %>
+                </td>
+                <td>
+                    <form method="GET" action="/urls/<%= url %>">
+                        <input type="submit" value="Edit">
+                    </form>
+                </td>
+                <td>
+                    <form method="POST" action="/urls/<%= url %>/delete">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+    <a href="/urls/new"><button>Click here</button></a> to shorten a URL
 </body>
+
 </html>
