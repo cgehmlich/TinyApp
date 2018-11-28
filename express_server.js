@@ -39,7 +39,7 @@ const users = {
 }
 // FUNCTIONS ---------------------------------------------------
 function generateRandomString() {
-    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+    var chars = "";
     var string_length = 6;
     var randomstring = '';
     for (var i = 0; i < string_length; i++) {
